@@ -7,71 +7,71 @@ Plano criar_plano() {
     return plano;
 }
 
-int adicionar_retangulo(Plano* plano, Retangulo ret) {
-    if (plano->num_retangulos < MAX_RETANGULOS) {
-        plano->retangulos[plano->num_retangulos] = ret;
-        plano->num_retangulos++;
-        aplicar_gravidade(plano);
-        return 1;  // Sucesso
+int adicionar_retangulo(Plano *plano, Retangulo ret) {
+    if (plano->num_retangulos >= MAX_RETANGULOS) {
+        return 0;
     }
-    return 0;  // Falha
+    plano->retangulos[plano->num_retangulos++] = ret;
+    return 1;
 }
 
-void aplicar_gravidade(Plano* plano) {
-    for (int i = 0; i < plano->num_retangulos; i++) {
-        while (plano->retangulos[i].y > 1) {
-            int pode_descer = 1;
-            for (int j = 0; j < plano->num_retangulos; j++) {
-                if (i != j &&
-                    plano->retangulos[i].x < plano->retangulos[j].x + plano->retangulos[j].largura &&
-                    plano->retangulos[i].x + plano->retangulos[i].largura > plano->retangulos[j].x &&
-                    plano->retangulos[i].y - 1 == plano->retangulos[j].y + plano->retangulos[j].altura) {
-                    pode_descer = 0;
-                    break;
-                }
-            }
-            if (pode_descer) {
-                plano->retangulos[i].y--;
-            } else {
-                break;
-            }
+void mover_retangulo_no_plano(Plano *plano, int indice, int deslocamento, int direcao) {
+    if (indice < 0 || indice >= plano->num_retangulos) {
+        return;
+    }
+
+    Retangulo *ret = &plano->retangulos[indice];
+
+    if (direcao == 0) { // move left
+        ret->x -= deslocamento;
+        if (ret->x < 1) {
+            ret->x = 1;
+        }
+    } else { // move right
+        ret->x += deslocamento;
+        if (ret->x + ret->largura > 80) {
+            ret->x = 80 - ret->largura;
         }
     }
 }
 
-void desenhar_plano(Plano* plano) {
-    char tela[25][80] = { ' ' };
-    for (int i = 0; i < plano->num_retangulos; i++) {
-        Retangulo ret = plano->retangulos[i];
-        for (int y = ret.y; y < ret.y + ret.altura; y++) {
-            for (int x = ret.x; x < ret.x + ret.largura; x++) {
-                tela[25 - y][x - 1] = 'x';
-            }
-        }
-    }
-    for (int y = 0; y < 25; y++) {
-        for (int x = 0; x < 80; x++) {
-            printf("%c", tela[y][x]);
-        }
-        printf("\n");
-    }
-}
-
-int encontrar_retangulo_por_ponto(Plano* plano, int x, int y) {
+int encontrar_retangulo_por_ponto(const Plano *plano, int x, int y) {
     for (int i = 0; i < plano->num_retangulos; i++) {
         Retangulo ret = plano->retangulos[i];
         if (x >= ret.x && x < ret.x + ret.largura && y >= ret.y && y < ret.y + ret.altura) {
             return i;
         }
     }
-    return -1;  // Não encontrado
+    return -1;
 }
 
-void mover_retangulo_no_plano(Plano* plano, int indice, int deslocamento, int direcao) {
-    if (direcao == 0) {  // Esquerda
-        mover_retangulo_esquerda(&plano->retangulos[indice], deslocamento);
-    } else {  // Direita
-        mover_retangulo_direita(&plano->retangulos[indice], deslocamento);
+void desenhar_plano(const Plano *plano) {
+    char canvas[25][81] = {0};
+
+    // Preencher com espaços vazios
+    for (int i = 0; i < 25; i++) {
+        for (int j = 0; j < 80; j++) {
+            canvas[i][j] = ' ';
+        }
     }
-    aplicar_gravidade(plano);
+
+    // Desenhar retângulos
+    for (int k = 0; k < plano->num_retangulos; k++) {
+        Retangulo ret = plano->retangulos[k];
+        for (int i = 0; i < ret.altura; i++) {
+            for (int j = 0; j < ret.largura; j++) {
+                if (ret.y + i < 25 && ret.x + j < 80) {
+                    canvas[ret.y + i - 1][ret.x + j - 1] = 'x';
+                }
+            }
+        }
+    }
+
+    // Imprimir canvas
+    for (int i = 24; i >= 0; i--) {
+        for (int j = 0; j < 80; j++) {
+            putchar(canvas[i][j]);
+        }
+        putchar('\n');
+    }
 }
