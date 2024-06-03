@@ -13,6 +13,7 @@ typedef struct {
 Plano criar_plano();
 int adicionar_retangulo(Plano *plano, Retangulo ret);
 void mover_retangulo_no_plano(Plano *plano, int indice, int deslocamento, int direcao);
+void aplicar_gravidade(Plano *plano);
 int encontrar_retangulo_por_ponto(const Plano *plano, int x, int y);
 void desenhar_plano(const Plano *plano);
 

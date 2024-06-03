@@ -11,6 +11,25 @@ int adicionar_retangulo(Plano *plano, Retangulo ret) {
     if (plano->num_retangulos >= MAX_RETANGULOS) {
         return 0;
     }
+
+    // Aplicar gravidade ao retângulo recém-criado
+    while (ret.y > 1) {
+        int pode_cair = 1;
+        for (int i = 0; i < plano->num_retangulos; i++) {
+            Retangulo outro = plano->retangulos[i];
+            if (ret.x < outro.x + outro.largura && ret.x + ret.largura > outro.x &&
+                ret.y == outro.y + outro.altura) {
+                pode_cair = 0;
+                break;
+            }
+        }
+        if (pode_cair) {
+            ret.y--;
+        } else {
+            break;
+        }
+    }
+
     plano->retangulos[plano->num_retangulos++] = ret;
     return 1;
 }
@@ -31,6 +50,32 @@ void mover_retangulo_no_plano(Plano *plano, int indice, int deslocamento, int di
         ret->x += deslocamento;
         if (ret->x + ret->largura > 80) {
             ret->x = 80 - ret->largura;
+        }
+    }
+
+    // Aplicar gravidade após mover
+    aplicar_gravidade(plano);
+}
+
+void aplicar_gravidade(Plano *plano) {
+    for (int i = 0; i < plano->num_retangulos; i++) {
+        Retangulo *ret = &plano->retangulos[i];
+        while (ret->y > 1) {
+            int pode_cair = 1;
+            for (int j = 0; j < plano->num_retangulos; j++) {
+                if (i == j) continue;
+                Retangulo outro = plano->retangulos[j];
+                if (ret->x < outro.x + outro.largura && ret->x + ret->largura > outro.x &&
+                    ret->y == outro.y + outro.altura) {
+                    pode_cair = 0;
+                    break;
+                }
+            }
+            if (pode_cair) {
+                ret->y--;
+            } else {
+                break;
+            }
         }
     }
 }
