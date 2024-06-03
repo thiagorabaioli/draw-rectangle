@@ -35,7 +35,7 @@ void processar_comando(Plano* plano, const char* comando) {
     }else if (strncmp(comando, "moveleft", 8) == 0) {
         int x, y, p;
         if (sscanf(comando, "moveleft %d,%d+%d", &x, &y, &p) == 3) {
-            
+
             int indice = encontrar_retangulo_por_ponto(plano, x, y);
             if (indice != -1) {
                 mover_retangulo_no_plano(plano, indice, p, 0);

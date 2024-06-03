@@ -125,13 +125,21 @@ void desenhar_plano(const Plano *plano) {
         }
     }
 
-    // Desenhar retângulos
+// Desenhar retângulos
     for (int k = 0; k < plano->num_retangulos; k++) {
         Retangulo ret = plano->retangulos[k];
         for (int i = 0; i < ret.altura; i++) {
             for (int j = 0; j < ret.largura; j++) {
-                if (ret.y + i < 25 && ret.x + j < 80) {
-                    canvas[ret.y + i - 1][ret.x + j - 1] = 'x';
+                char caracter;
+                // Verifica se estamos no interior do retângulo
+                if (i != 0 && i != ret.altura - 1 && j != 0 && j != ret.largura - 1) {
+                    caracter = 'o'; // Se sim, usa 'o'
+                } else {
+                    caracter = 'x'; // Caso contrário, usa 'x'
+                }
+                // Verifica se a posição está dentro dos limites do plano
+                if (ret.y + i - 1 < 25 && ret.x + j - 1 < 80) {
+                    canvas[ret.y + i - 1][ret.x + j - 1] = caracter;
                 }
             }
         }
