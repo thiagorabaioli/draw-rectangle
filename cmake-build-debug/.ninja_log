@@ -1,0 +1,12 @@
+# ninja log v5
+9	54	7391122880150362	CMakeFiles/untitled.dir/rectangle.c.obj	dd7179165cbd094a
+0	107	7391123213553908	build.ninja	e2fd71295ca7004a
+7	52	7391123214663932	CMakeFiles/untitled.dir/rectangle.c.obj	dd7179165cbd094a
+2	61	7391123214763936	CMakeFiles/untitled.dir/main.c.obj	7f8cc147de7bd623
+5	65	7391123214803924	CMakeFiles/untitled.dir/menu.c.obj	91d6e920c325771b
+0	66	7391123214813924	CMakeFiles/untitled.dir/plano.c.obj	2d2b4d144ce36e93
+66	162	7391123215753928	untitled.exe	f5b7493d95ada199
+1	65	7391123933427427	CMakeFiles/untitled.dir/menu.c.obj	91d6e920c325771b
+65	137	7391123934137448	untitled.exe	f5b7493d95ada199
+2	59	7391124036513865	CMakeFiles/untitled.dir/menu.c.obj	91d6e920c325771b
+59	132	7391124037203821	untitled.exe	f5b7493d95ada199
