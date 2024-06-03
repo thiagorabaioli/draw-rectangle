@@ -3,7 +3,9 @@
 #include "plano.h"
 #include "menu.h"
 
+
 int main() {
+
     Plano plano = criar_plano();
     char comando[100];
 

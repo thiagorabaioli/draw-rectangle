@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "plano.h"
+#include <math.h>
 
 Plano criar_plano() {
     Plano plano;
@@ -114,6 +115,60 @@ int encontrar_retangulo_por_ponto(const Plano *plano, int x, int y) {
     }
     return -1;
 }
+
+void remover_retangulo(Plano *plano, int indice) {
+    // Verificar se o índice está dentro do intervalo válido
+    if (indice >= 0 && indice < plano->num_retangulos) {
+        // Movimentar os retângulos seguintes uma posição para trás
+        for (int i = indice; i < plano->num_retangulos - 1; i++) {
+            plano->retangulos[i] = plano->retangulos[i + 1];
+        }
+        // Decrementar o número de retângulos no plano
+        plano->num_retangulos--;
+    }
+}
+
+
+void merge_retangulos(Plano *plano, int x1, int y1, int x2, int y2) {
+    // Encontrar os índices dos retângulos que contêm os pontos (x1, y1) e (x2, y2)
+    int indice1 = encontrar_retangulo_por_ponto(plano, x1, y1);
+    int indice2 = encontrar_retangulo_por_ponto(plano, x2, y2);
+
+    // Verificar se os retângulos foram encontrados
+    if (indice1 == -1 || indice2 == -1) {
+        printf("Erro: Retângulos não encontrados.\n");
+        return;
+    }
+
+    // Obter os retângulos correspondentes aos índices encontrados
+    Retangulo *ret1 = &plano->retangulos[indice1];
+    Retangulo *ret2 = &plano->retangulos[indice2];
+
+    // Verificar se os retângulos têm a mesma largura
+    if (ret1->largura != ret2->largura) {
+        printf("Erro: Os retângulos não têm a mesma largura.\n");
+        return;
+    }
+
+    // Verificar se os retângulos estão sobrepostos verticalmente
+    if (ret1->y != ret2->y || ret1->altura != ret2->altura) {
+        printf("Erro: Os retângulos não estão sobrepostos verticalmente.\n");
+        return;
+    }
+
+    // Verificar se os retângulos estão totalmente sobrepostos
+    if (x1 >= ret2->x && x2 <= ret1->x + ret1->largura) {
+        // Atualizar as coordenadas do primeiro retângulo para englobar o segundo
+        ret1->x = fmin(ret1->x, ret2->x);
+        ret1->largura = fmax(ret1->x + ret1->largura, ret2->x + ret2->largura) - ret1->x;
+        // Remover o segundo retângulo
+        remover_retangulo(plano, indice2);
+        printf("Retângulos unidos com sucesso.\n");
+    } else {
+        printf("Erro: Os retângulos não estão totalmente sobrepostos.\n");
+    }
+}
+
 
 void desenhar_plano(const Plano *plano) {
     char canvas[25][81] = {0};
