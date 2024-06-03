@@ -2,6 +2,7 @@
 #include "plano.h"
 #include <math.h>
 
+
 Plano criar_plano() {
     Plano plano;
     plano.num_retangulos = 0;
@@ -206,8 +207,10 @@ void desenhar_plano(const Plano *plano) {
             putchar(canvas[i][j]);
         }
         putchar('\n');
+       }
+
     }
-}
+
 
 
 
