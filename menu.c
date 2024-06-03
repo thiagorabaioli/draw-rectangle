@@ -12,8 +12,11 @@ void exibir_menu() {
     printf("  exit              - Encerra o programa\n");
 }
 
-void exibir_posicao_retangulo(const Retangulo* ret) {
-    printf("Posição atual do retângulo: (%d, %d)\n", ret->x, ret->y);
+void exibir_posicoes_retangulos(const Plano* plano) {
+    printf("Posições atuais dos retângulos:\n");
+    for (int i = 0; i < plano->num_retangulos; i++) {
+        printf("  Retângulo %d: (%d, %d)\n", i + 1, plano->retangulos[i].x, plano->retangulos[i].y);
+    }
 }
 
 void processar_comando(Plano* plano, const char* comando) {
@@ -22,7 +25,7 @@ void processar_comando(Plano* plano, const char* comando) {
         if (sscanf(comando, "create %d,%d+%d,%d", &x, &y, &largura, &altura) == 4) {
             Retangulo novo = criar_retangulo(x, y, largura, altura);
             if (adicionar_retangulo(plano, novo)) {
-                exibir_posicao_retangulo(&novo);
+                printf("Retângulo criado com sucesso.\n");
             } else {
                 printf("Erro: Não foi possível criar o retângulo.\n");
             }
@@ -35,7 +38,7 @@ void processar_comando(Plano* plano, const char* comando) {
             int indice = encontrar_retangulo_por_ponto(plano, x, y);
             if (indice != -1) {
                 mover_retangulo_no_plano(plano, indice, p, 0);
-                exibir_posicao_retangulo(&plano->retangulos[indice]);
+                printf("Retângulo movido para a esquerda.\n");
             } else {
                 printf("Erro: Retângulo não encontrado.\n");
             }
@@ -48,7 +51,7 @@ void processar_comando(Plano* plano, const char* comando) {
             int indice = encontrar_retangulo_por_ponto(plano, x, y);
             if (indice != -1) {
                 mover_retangulo_no_plano(plano, indice, p, 1);
-                exibir_posicao_retangulo(&plano->retangulos[indice]);
+                printf("Retângulo movido para a direita.\n");
             } else {
                 printf("Erro: Retângulo não encontrado.\n");
             }
@@ -62,5 +65,5 @@ void processar_comando(Plano* plano, const char* comando) {
     }
 
     desenhar_plano(plano);
-    
+    exibir_posicoes_retangulos(plano);
 }
