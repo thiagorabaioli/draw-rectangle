@@ -56,6 +56,31 @@ void mover_retangulo_no_plano(Plano *plano, int indice, int deslocamento, int di
     // Aplicar gravidade após mover
     aplicar_gravidade(plano);
 }
+#include <stdio.h>
+#include "plano.h"
+
+void mover_retangulo(Plano *plano, int x, int y, int deslocamento) {
+    for (int i = 0; i < plano->num_retangulos; i++) {
+        Retangulo *retangulo = &plano->retangulos[i];
+        // Verifica se a posição (x, y) está dentro do retângulo
+        if (x >= retangulo->x && x <= retangulo->x + retangulo->largura &&
+            y >= retangulo->y && y <= retangulo->y + retangulo->altura) {
+            // Calcula a nova posição do retângulo após o deslocamento
+            int nova_posicao = retangulo->x + deslocamento;
+            // Verifica se a nova posição está dentro dos limites do plano
+            if (nova_posicao >= 1 && nova_posicao + retangulo->largura <= 80) {
+                retangulo->x = nova_posicao;
+                printf("Retângulo movido com sucesso.\n");
+                return;
+            } else {
+                printf("Erro: O deslocamento ultrapassa os limites do plano.\n");
+                return;
+            }
+        }
+    }
+    printf("Erro: Não foi encontrado retângulo na posição especificada.\n");
+}
+
 
 void aplicar_gravidade(Plano *plano) {
     for (int i = 0; i < plano->num_retangulos; i++) {
@@ -96,7 +121,7 @@ void desenhar_plano(const Plano *plano) {
     // Preencher com espaços vazios
     for (int i = 0; i < 25; i++) {
         for (int j = 0; j < 80; j++) {
-            canvas[i][j] = ' ';
+            canvas[i][j] = '-';
         }
     }
 
@@ -120,3 +145,6 @@ void desenhar_plano(const Plano *plano) {
         putchar('\n');
     }
 }
+
+
+

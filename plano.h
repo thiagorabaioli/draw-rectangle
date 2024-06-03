@@ -16,5 +16,6 @@ void mover_retangulo_no_plano(Plano *plano, int indice, int deslocamento, int di
 void aplicar_gravidade(Plano *plano);
 int encontrar_retangulo_por_ponto(const Plano *plano, int x, int y);
 void desenhar_plano(const Plano *plano);
+void mover_retangulo(Plano* plano, int x, int y, int deslocamento); // Nova declaração
 
 #endif // PLANO_H

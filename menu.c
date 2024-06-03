@@ -32,7 +32,7 @@ void processar_comando(Plano* plano, const char* comando) {
         } else {
             printf("Comando inválido.\n");
         }
-    } else if (strncmp(comando, "moveleft", 8) == 0) {
+    }else if (strncmp(comando, "moveleft", 8) == 0) {
         int x, y, p;
         if (sscanf(comando, "moveleft %d,%d+%d", &x, &y, &p) == 3) {
             int indice = encontrar_retangulo_por_ponto(plano, x, y);
